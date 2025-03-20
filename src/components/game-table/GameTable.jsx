@@ -14,6 +14,7 @@ export function GameTable() {
   // Crear la matriz con parámetros (destructuración de objetos)
   const esparcirMinas = (gameItems) => {
     let cloneStateGameItems = { ...gameItems }
+
     // Copia de la matriz para alterar
     cloneStateGameItems.aCampoMinas = Array.from(
       { length: cloneStateGameItems.numFilas },
@@ -46,40 +47,70 @@ export function GameTable() {
     }
     setGameItems(cloneStateGameItems)
   }
-  useEffect(() => {
-    esparcirMinas(gameItems)
-  }, [])
 
-  const updateBoard = (row, column) => {
+  const updateBoard = (row, column, casilla) => {
     console.log('Click en', 'f' + row + '_c' + column)
     let cloneStateGameItems = { ...gameItems }
 
-    let element = gameItems.aCampoMinas[row][column]
-    let rowsQuantity = gameItems.aCampoMinas.length
-    let numeroMinasAlrededor = element === true ? -1 : 0
+    let squareTarget = cloneStateGameItems.aCampoMinas[row][column]
 
-    for (let zrow = row - 1; zrow <= row + 1; zrow++) {
-      for (let zColumn = column - 1; zColumn <= column + 1; zColumn++) {
+    if (
+      row > -1 &&
+      row < cloneStateGameItems.numFilas &&
+      column > -1 &&
+      column < cloneStateGameItems.numColumnas
+    ) {
+      if (
+        !casilla.classList.contains('destapado') &&
+        !casilla.classList.contains('icon-bandera')
+      ) {
+        casilla.classList.add('destapado')
+
+        if (squareTarget == '💣') return
+        searchBombsAround(cloneStateGameItems, row, column, casilla)
+      } else return
+    }
+  }
+
+  let searchBombsAround = (cloneStateGameItems, numFilas, numColumnas, element) => {
+    let rowsQuantity = gameItems.aCampoMinas.length
+    let numeroMinasAlrededor = 0
+
+    for (let zrow = numFilas - 1; zrow <= numFilas + 1; zrow++) {
+      for (
+        let znumColumnas = numColumnas - 1;
+        znumColumnas <= numColumnas + 1;
+        znumColumnas++
+      ) {
         if (
           zrow > -1 &&
           zrow < rowsQuantity &&
-          zColumn > -1 &&
-          zColumn < gameItems.numFilas
+          znumColumnas > -1 &&
+          znumColumnas < cloneStateGameItems.numFilas
         ) {
-          if (gameItems.aCampoMinas[zrow][zColumn] === '💣') {
+          if (cloneStateGameItems.aCampoMinas[zrow][znumColumnas] === '💣') {
             numeroMinasAlrededor++
           }
         }
       }
     }
-    cloneStateGameItems.aCampoMinas[row][column] = numeroMinasAlrededor
+    if (cloneStateGameItems.aCampoMinas[numFilas][numColumnas] !== '💣') {
+      cloneStateGameItems.aCampoMinas[numFilas][numColumnas] =
+        numeroMinasAlrededor
+    }
+    console.log(cloneStateGameItems.aCampoMinas)
+    element.classList.add(
+      `${cloneStateGameItems.aCampoMinas[numFilas][numColumnas]}`
+    )
     setGameItems(cloneStateGameItems)
   }
 
   const addFLag = (casilla) => {
     let cloneStateGameItems = { ...gameItems }
 
-    casilla.classList.toggle('icon-bandera')
+    if (!casilla.classList.contains('destapado')) {
+      casilla.classList.toggle('icon-bandera')
+    } else return
     if (casilla.classList.contains('icon-bandera')) {
       cloneStateGameItems.numberFlags--
     } else {
@@ -87,6 +118,10 @@ export function GameTable() {
     }
     setGameItems(cloneStateGameItems)
   }
+
+  useEffect(() => {
+    esparcirMinas(gameItems)
+  }, [])
 
   return (
     <>

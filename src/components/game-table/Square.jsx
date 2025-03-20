@@ -1,16 +1,12 @@
 import { useState } from 'react'
 
-export const Square = ({ hasBomb, children , updateBoard, addFLag, row, column }) => {
-  const [isSelected, setIsSelected] = useState(false)
-
+export const Square = ({ children, updateBoard, addFLag, row, column }) => {
   let setAttribute = 'f' + row + '_c' + column
 
   const handleClick = (miEvento) => {
-    // isSelected ? setIsSelected(false) : setIsSelected(true)
     if (miEvento.type === 'contextmenu') {
       //obtenemos el elemento que ha disparado el evento
       let casilla = miEvento.currentTarget
-      
 
       //detenemos el burbujeo del evento y su accion por defecto
       miEvento.stopPropagation()
@@ -28,7 +24,9 @@ export const Square = ({ hasBomb, children , updateBoard, addFLag, row, column }
       // console.log(miEvento)
       miEvento.stopPropagation()
       miEvento.preventDefault()
-      updateBoard(row, column)
+      
+      let casilla = miEvento.currentTarget
+      updateBoard(row, column, casilla)
     }
   }
 
@@ -36,9 +34,7 @@ export const Square = ({ hasBomb, children , updateBoard, addFLag, row, column }
     <div
       onClick={handleClick}
       onContextMenu={handleClick}
-      className={`square ${
-        isSelected ? 'is-selected' : ''
-      } h-8 w-8 bg-[#BBBBBB]`}
+      className={`h-8 w-8 bg-[#BBBBBB]`}
       id={setAttribute}
       data-fila={row}
       data-columna={column}
