@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { MinesweeperBanner } from './components/UI/BuscaMinasBanner'
 import { GameTable } from './components/game-table/GameTable'
 
