@@ -1,27 +1,37 @@
-import reactLogo from './assets/react.svg'
+import { useState, useEffect } from 'react'
 import { MinesweeperBanner } from './components/UI/BuscaMinasBanner'
 import { GameTable } from './components/game-table/GameTable'
 
 import './App.css'
 
 function App() {
+  // Items del tablero
+  const [gameItems, setGameItems] = useState({
+    numMinasTotales: 30,
+    numberFlags: 40,
+    numFilas: 15,
+    numColumnas: 15,
+    aCampoMinas: [],
+    tablePlayer: [],
+  })
   return (
     <>
-      <div className='max-h-3/4 flex items-center justify-center p-4 sm:p-6 md:p-24 bg-slate-100'>
+      <div className='flex items-center justify-center sm:p-6 md:p-16 bg-slate-100 sm:h-full'>
         <div className='w-full max-w-4xl'>
-          <MinesweeperBanner />
-
-          <div className='mt-8 p-6 bg-white rounded-lg shadow'>
-            <h2 className='text-xl font-semibold mb-4'>How to Play</h2>
+          <MinesweeperBanner counterFlags={gameItems.numberFlags} />
+          <div className='mt-4 p-6 bg-white rounded-lg shadow'>
+            <h2 className='text-xl font-semibold mb-4'>¿Como se juega?</h2>
             <ul className='list-disc pl-5 space-y-2 text-left'>
-              <li>Left-click to reveal a cell</li>
-              <li>Right-click to place a flag on a suspected mine</li>
-              <li>Numbers indicate how many mines are adjacent to that cell</li>
-              <li>Clear all cells without mines to win!</li>
+              <li>Left-click para revelar la celda</li>
+              <li>Right-click para ubicar una bandera</li>
+              <li>
+                Los números indican cuántas minas hay en celdas adyacentes
+              </li>
+              <li>Limpia todas las celdas sin minas para ganar!</li>
             </ul>
           </div>
         </div>
-        <GameTable />
+        <GameTable stateTable={gameItems} modifyTable={setGameItems} />
       </div>
     </>
   )

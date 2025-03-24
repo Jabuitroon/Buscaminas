@@ -1,25 +1,25 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { Square } from './Square'
+import { LogIn } from 'lucide-react'
 
-export function GameTable() {
-  // Items del tablero
-  const [gameItems, setGameItems] = useState({
-    numMinasTotales: 30,
-    numberFlags: 40,
-    numFilas: 15,
-    numColumnas: 15,
-    aCampoMinas: [],
-  })
+export function GameTable({ stateTable, modifyTable }) {
+  let cloneStateGameItems = { ...stateTable }
+
+  // Copia de la matriz para alterar
+  cloneStateGameItems.tablePlayer = Array.from(
+    { length: cloneStateGameItems.numFilas },
+    () => Array(cloneStateGameItems.numColumnas).fill('')
+  )
 
   // Crear la matriz con parámetros (destructuración de objetos)
-  const esparcirMinas = (gameItems) => {
-    let cloneStateGameItems = { ...gameItems }
-
+  const esparcirMinas = () => {
     // Copia de la matriz para alterar
+    let cloneStateGameItems = { ...stateTable }
     cloneStateGameItems.aCampoMinas = Array.from(
       { length: cloneStateGameItems.numFilas },
       () => Array(cloneStateGameItems.numColumnas).fill('')
     )
+
     if (
       cloneStateGameItems.numMinasTotales >
       cloneStateGameItems.numFilas * cloneStateGameItems.numColumnas
@@ -45,14 +45,18 @@ export function GameTable() {
         numMinasEsparcidas++
       }
     }
-    setGameItems(cloneStateGameItems)
+
+    cloneStateGameItems.tablePlayer = Array.from(
+      { length: stateTable.numFilas },
+      () => Array(stateTable.numColumnas).fill('')
+    )
+
+    modifyTable(cloneStateGameItems)
   }
 
   const updateBoard = (row, column, casilla) => {
     console.log('Click en', 'f' + row + '_c' + column)
-    let cloneStateGameItems = { ...gameItems }
-
-    let squareTarget = cloneStateGameItems.aCampoMinas[row][column]
+    let cloneStateGameItems = { ...stateTable }
 
     if (
       row > -1 &&
@@ -66,14 +70,24 @@ export function GameTable() {
       ) {
         casilla.classList.add('destapado')
 
-        if (squareTarget == '💣') return
-        searchBombsAround(cloneStateGameItems, row, column, casilla)
+        if (cloneStateGameItems.aCampoMinas[row][column] == '💣') {
+          cloneStateGameItems.tablePlayer = cloneStateGameItems.aCampoMinas
+          modifyTable(cloneStateGameItems)
+        }
+
+        const up = searchBombsAround(cloneStateGameItems, row, column, casilla)
+        modifyTable(up)
       } else return
     }
   }
 
-  let searchBombsAround = (cloneStateGameItems, numFilas, numColumnas, element) => {
-    let rowsQuantity = gameItems.aCampoMinas.length
+  let searchBombsAround = (
+    cloneStateGameItems,
+    numFilas,
+    numColumnas,
+    element
+  ) => {
+    let rowsQuantity = stateTable.aCampoMinas.length
     let numeroMinasAlrededor = 0
 
     for (let zrow = numFilas - 1; zrow <= numFilas + 1; zrow++) {
@@ -95,18 +109,18 @@ export function GameTable() {
       }
     }
     if (cloneStateGameItems.aCampoMinas[numFilas][numColumnas] !== '💣') {
-      cloneStateGameItems.aCampoMinas[numFilas][numColumnas] =
+      cloneStateGameItems.tablePlayer[numFilas][numColumnas] =
         numeroMinasAlrededor
     }
-    console.log(cloneStateGameItems.aCampoMinas)
     element.classList.add(
-      `${cloneStateGameItems.aCampoMinas[numFilas][numColumnas]}`
+      `around-${cloneStateGameItems.tablePlayer[numFilas][numColumnas]}`
     )
-    setGameItems(cloneStateGameItems)
+
+    return cloneStateGameItems
   }
 
   const addFLag = (casilla) => {
-    let cloneStateGameItems = { ...gameItems }
+    let cloneStateGameItems = { ...stateTable }
 
     if (!casilla.classList.contains('destapado')) {
       casilla.classList.toggle('icon-bandera')
@@ -116,32 +130,30 @@ export function GameTable() {
     } else {
       cloneStateGameItems.numberFlags++
     }
-    setGameItems(cloneStateGameItems)
+    modifyTable(cloneStateGameItems)
   }
 
   useEffect(() => {
-    esparcirMinas(gameItems)
+    esparcirMinas()
   }, [])
+
+  console.log('state', cloneStateGameItems)
 
   return (
     <>
       <section className='tablero w-full flex'>
         <div className='tablero_template my-0 mx-auto'>
-          <header>
-            Numero de banderas Disponibles {gameItems.numberFlags}
-          </header>
-          {gameItems.aCampoMinas.map((fila, indexRow) => (
+          {stateTable.tablePlayer.map((fila, indexRow) => (
             <div key={indexRow} className='flex'>
               {fila.map((_, indexColumn) => (
                 <Square
                   key={indexColumn}
-                  hasBomb={indexRow[indexColumn]}
                   row={indexRow}
                   column={indexColumn}
                   updateBoard={updateBoard}
                   addFLag={addFLag}
                 >
-                  {gameItems.aCampoMinas[indexRow][indexColumn]}
+                  {stateTable.tablePlayer[indexRow][indexColumn]}
                 </Square>
               ))}
             </div>

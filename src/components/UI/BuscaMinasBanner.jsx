@@ -1,6 +1,6 @@
 import { Bomb, Flag } from 'lucide-react'
 
-export function MinesweeperBanner() {
+export function MinesweeperBanner({counterFlags}) {
   return (
     <div className='w-full bg-gradient-to-r from-slate-800 to-slate-700 p-4 sm:p-6 md:p-8 rounded-lg shadow-lg'>
       <div className='flex flex-col sm:flex-row items-center justify-between gap-4'>
@@ -12,7 +12,7 @@ export function MinesweeperBanner() {
             <div className='absolute -top-1 -right-1 h-4 w-4 bg-red-500 rounded-full animate-pulse' />
           </div>
           <h1 className='text-2xl md:text-3xl lg:text-4xl font-bold text-white tracking-tight'>
-            MINESWEEPER
+            Busca Minas
           </h1>
         </div>
       </div>
@@ -33,7 +33,7 @@ export function MinesweeperBanner() {
 
           <div className='flex items-center gap-2 bg-slate-600 px-3 py-1 rounded-md'>
             <Flag className='h-5 w-5 text-red-500' />
-            <span className='font-mono font-bold text-white'>10</span>
+            <span className='font-mono font-bold text-white'>{counterFlags}</span>
           </div>
         </div>
       </div>

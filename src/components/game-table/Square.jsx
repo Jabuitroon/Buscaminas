@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 export const Square = ({ children, updateBoard, addFLag, row, column }) => {
   let setAttribute = 'f' + row + '_c' + column
 
@@ -24,7 +22,7 @@ export const Square = ({ children, updateBoard, addFLag, row, column }) => {
       // console.log(miEvento)
       miEvento.stopPropagation()
       miEvento.preventDefault()
-      
+
       let casilla = miEvento.currentTarget
       updateBoard(row, column, casilla)
     }
@@ -39,7 +37,7 @@ export const Square = ({ children, updateBoard, addFLag, row, column }) => {
       data-fila={row}
       data-columna={column}
     >
-      {children}
+      <span className='font-mono'>{children}</span>
     </div>
   )
 }

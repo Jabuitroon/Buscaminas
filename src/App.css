@@ -39,14 +39,29 @@
   content: '\e800';
   color: #b22222;
 }
+
 .icon-bomba:before {
   content: '\f1e2';
+}
+
+.tap:before {
+  content: '\e800';
 }
 
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
   }
+}
+
+.around-1{
+color: #155dfc;
+}
+.around-2{
+color: oklch(0.627 0.194 149.214);
+}
+.around-3{
+color: oklch(0.577 0.245 27.325);
 }
 
 .card {
