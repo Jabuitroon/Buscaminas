@@ -48,5 +48,6 @@ export default tseslint.config({
   },
 })
 ```
-Referencia
+# Referencia
+
 https://adictosaltrabajo.com/2020/06/03/programar-un-buscaminas-en-javascript-con-tu-hijo/
