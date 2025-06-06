@@ -13,7 +13,9 @@ function App() {
     numColumnas: 15,
     aCampoMinas: [],
     tablePlayer: [],
+    isPlaying: true,
   })
+
   return (
     <>
       <div className='flex items-center justify-center sm:p-6 md:p-16 bg-slate-100 sm:h-full'>

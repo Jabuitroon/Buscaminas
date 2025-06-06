@@ -11,10 +11,9 @@ export const Square = ({ children, updateBoard, addFLag, row, column }) => {
       miEvento.preventDefault()
 
       //obtenemos la fila de las propiedades dataset.
-      let fila = casilla.dataset.fila
-      let columna = casilla.dataset.columna
+      casilla.dataset.fila
+      casilla.dataset.columna
 
-      console.log(fila, columna)
       addFLag(casilla)
     }
 
@@ -32,7 +31,7 @@ export const Square = ({ children, updateBoard, addFLag, row, column }) => {
     <div
       onClick={handleClick}
       onContextMenu={handleClick}
-      className={`h-8 w-8 bg-[#BBBBBB]`}
+      className={`h-8 w-8 bg-[#BBBBBB] square`}
       id={setAttribute}
       data-fila={row}
       data-columna={column}
